@@ -1,36 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h> // For abs()
 
-int main() {
-    int num_requests, head, total_seek = 0;
-    // Input: Number of disk requests
-    printf("Enter number of disk requests: ");
-    scanf("%d", &num_requests);
-    int requests[num_requests];
-    // Input: Disk request queue
-    printf("Enter the disk requests (first is the start point): ");
-    for (int i = 0; i < num_requests; i++) {
-        scanf("%d", &requests[i]);
-    }
-    // int start = requests[0];
-    int start = 50; //lets assume
-    head = requests[0];
-    int biggest = -1, smallest = -1;
-    for(int i = 0;i<num_requests;i++){
-        if(requests[i]>biggest){
-            biggest = requests[i];
-        }
-        if(requests[i] < start){
-            if(smallest == -1 || requests[i] > smallest){
-                smallest = requests[i];
+int c_scan(int arr[],int n){
+    int ans=0,pos=0,head=arr[0];
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n-i-1;j++){
+            if(arr[j] > arr[j+1]){
+                int temp=arr[j];
+                arr[j]=arr[j+1];
+                arr[j+1]=temp;
             }
         }
     }
-    biggest = 199; //assuming
-
-    printf("Biggest = %d, smallest = %d, start = %d\n", biggest, smallest, start);
-    printf("(%d - %d) + (%d - 0) + (%d - 0)\n", biggest, start, biggest, smallest);
-    int result = abs(biggest - start) + biggest + smallest; //if user want to move up first
-    // int result = abs(requests[0] - smallest) + abs(smallest - biggest); //if user wants to move downwards first
-    printf("Total seek Movement: %d", result);
+    while(arr[pos] < head) pos++;
+    for(int i=pos;i<n;i++) ans+=abs(arr[i]-head), head=arr[i];
+    ans+=(size-1-head)+(size-1),head=0;
+    for(int i=0;i<pos;i++) ans+=abs(arr[i]-head),head=arr[i];
+    return ans;
+}
+int main(){
+    int n=9;
+    int arr[]={55,58,60,70,18,90,150,160,184};
+    int ans=fcfs(arr,n);
+    printf("%d",ans);
 }
